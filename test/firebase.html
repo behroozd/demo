@@ -1,0 +1,39 @@
+<html>
+  <head>
+  <title>Firebase</title>
+    <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+    <script src="https://cdn.firebase.com/js/simple-login/1.6.4/firebase-simple-login.js"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+  </head>
+  <body>
+  <a href='javascript:authClient'> Log In! <a/>
+  <input type='text' id='nameInput' placeholder='Name'>
+  <input type='text' id='messageInput' placeholder='Message'>
+  
+  <script>
+  var myDataRef = new Firebase('https://parsedata.firebaseio.com/');
+
+  var authClient = new FirebaseSimpleLogin(myDataRef, function(error, user) {
+  	if (error !== null) {
+    	console.log("Error authenticating:", error);
+  	} else if (user !== null) {
+    	console.log("User is logged in:", user);
+  	} else {
+    	console.log("User is logged out");
+  	}
+  });
+  $('#messageInput').keypress(function (e) {
+  	if (e.keyCode == 13) {
+    	var name = $('#nameInput').val();
+        var text = $('#messageInput').val();
+        myDataRef.set({name: name, text: text});
+        <!--myDataRef.set('User ' + name + ' says ' + text);-->
+        $('#messageInput').val('');
+ 	}
+  });
+
+  	var loginlink = document.getElementById('login');
+	loginlink.onclick = authClient;
+  </script>
+  </body>
+</html>
